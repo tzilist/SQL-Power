@@ -13,7 +13,7 @@ var TableInput = React.createClass({
     }
     var requiringSequelize = this.props.state.string.substring(0,semicolons[0])
     var newInstanceOfSequelize = this.props.state.string.substring(semicolons[0], semicolons[1])
-    
+
     var object = this.props.state.string.substring(semicolons[1], semicolons[2])
     var objectHoldingFunc = this.props.state.string.substring(semicolons[2], semicolons[3])
     var schema = this.props.state.string.substring(semicolons[3], semicolons[4])
@@ -40,8 +40,14 @@ var TableInput = React.createClass({
           <div key={i} className='colnamesdiv'>
             <input id={'colnames'+i} placeholder='Column Name'></input>
             <select id={'coltype'+i}>
-              <option>string</option>
-              <option>number</option>
+              <option>STRING</option>
+              <option>NUMBER</option>
+              <option>CHAR</option>
+              <option>TEXT</option>
+              <option>INTERGER</option>
+              <option>DECIMAL</option>
+              <option>DATE</option>
+              <option>JSON</option>
             </select>
             <br/>
           </div>

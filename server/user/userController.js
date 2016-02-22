@@ -14,21 +14,21 @@ var userController = {};
 
 //user will create profile in signup and successfully store to DB if username is not taken
 userController.createUser = function(req, res,next){
+
   //if user tries to create an account with improper input fields, user will be redirected to signup
   if(!req.body.username || !req.body.password){
-    res.sendFile(path.join(__dirname + './../../client/signup.html'), {error: "Must include username and password"});
+    res.sendFile(path.join(__dirname + './../../client/index.html'), {error: "Must include username and password"});
   }
-  //save username and password into database section
 
+  //save username and password into database section
   var newUser = new User({
       username: req.body.username,
       password: req.body.password
     });
 
-    // newUser.save(function(err, result) {
-    //   if (err) return res.render(path.join(client, 'signup'), {error: "Username is taken"});
-    //   res.redirect('/permission');
-    // });
+    newUser.save(function(err, result) {
+      if (err) res.sendFile(path.join(__dirname + './../../client/index.html'));
+    });
 
 };
 
@@ -36,15 +36,20 @@ userController.createUser = function(req, res,next){
 userController.verify = function(req,res,next){
   // if input fields are undefined, do nothing
   if(!req.body.username || !req.body.password){
-    res.sendFile(path.join(__dirname + './../../client/signup.html'), {error: "Must include username and password"});
+    return res.sendFile(path.join(__dirname + './../../client/index.html'), {error: "Must include username and password"});
   }
 
-  if(req.body.username === test.username && req.body.password===test.password){
 
-  }
-  else{
-    res.redirect('/signup');
-  }
+  User.findOne({username: req.body.username}, function(err, result){
+    if(err || !result) return res.send('failed');
+
+    result.comparePassword(req.body.password, function(err, check){
+      if(!check) res.send('failed password');
+      res.redirect('/permission');
+    });
+  });
+
+
 };
 
 

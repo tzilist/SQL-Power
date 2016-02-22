@@ -40,9 +40,7 @@ var App = React.createClass({
         this.setState({columns: this.state.columns, table: this.state.table, un:this.state.un, pw:this.state.pw, string: data.string})
       }.bind(this)
     })
-    console.log(this.state)
-    alert('hi')
-
+    console.log(this.state);
   },
 
   string: '',
