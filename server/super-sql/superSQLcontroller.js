@@ -9,17 +9,17 @@ superSQLController.createSQLModel = createSQLModel;
       "schema":{
       "database": {
         "type"     : 'sql',
-        "username" : 'name_value',
-        "password" : 'db_password',
+        "username" : 'Sequelize.String',
+        "password" : 'Sequelize.String',
         "url"      : 'localhost://3000'
       },
 
       "data": {
         "table": 'table_name',
         "colORdocs" : [{
-          "column Name" : "value",
-          "column Name" : "value",
-          "column Name" : "value"
+          "username" : "johnCrackersmacker",
+          "password" : "yabbadabbado",
+          "url" : "www.super.com"
           }]
         }
       }
