@@ -7,7 +7,7 @@ var App = React.createClass({
 
   getInitialState: function() {
     return {columns: 0, sqlSchema: [], table: '', un: '', pw: '', string: ''}
-  },
+  }, 
 
   // createTable: function(e) {
   //   e.preventDefault();
