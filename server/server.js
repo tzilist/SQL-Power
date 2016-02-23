@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const userController = require('./user/userController');
 const cookieController = require('./cookie/cookieController');
 const sessionController = require('./session/sessionController');
+const mongoToSQL = require('./super-sql/mongoToSQLcontroller');
 const schema = require('./user/postgresSchema');
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -64,6 +65,11 @@ app.post('/upload', multer({storage: storage}).single('database'), (req, res) =>
 
 app.get('/start', sessionController.isLoggedIn, function(req, res) {
   res.sendFile(path.join(__dirname, '../client/loggedin.html'));
+});
+
+app.get('/test', (req, res) => {
+  console.log('mongotosql');
+  res.status(200).end();
 });
 
 app.use(express.static(path.join(__dirname, './../client')));

@@ -2,58 +2,63 @@
 const express = require('express');
 
 const superSQLController = {};
-
+superSQLController.createSQLModel = createSQLModel;
 //Our json data object
-let dataChunk = { schema:{
-                          "database": {
-                                      "type"     : 'sql',
-                                      "username" : 'name_value',
-                                      "password" : 'db_password',
-                                      "url"      : 'localhost://3000'
-                                      },
 
-                              "data": [{
-                                        "table": 'table_name',
-                                        "col-docs" : [{
-                                                      "column Name" : "value",
-                                                      "column Name" : "value",
-                                                      "column Name" : "value"
-                                                      }]
-                                      }]
-                            }
+    const dataChunk = {
+      "schema":{
+      "database": {
+        "type"     : 'sql',
+        "username" : 'name_value',
+        "password" : 'db_password',
+        "url"      : 'localhost://3000'
+      },
 
-                };
+      "data": {
+        "table": 'table_name',
+        "colORdocs" : [{
+          "column Name" : "value",
+          "column Name" : "value",
+          "column Name" : "value"
+          }]
+        }
+      }
 
+    };
 
- // console.log(JSON.stringify(dataChunk, null, '\t'));
-
-
-module.exports = {
-
-    createSQLModel: function (req, res, next){
+    function createSQLModel(dataChunk) {
         //templating for the top require sequelize and Constructor
-        // let db = req.body.schema;  //production variable
-        let db    = dataChunk.schema;
+        // const db = req.body.schema;  //production variable
+        const db    = dataChunk.schema;
+        const dbData = dataChunk.schema.data.colORdocs;
 
-        let _RequireSQL  = `var Sequelize = require('sequelize')`;
-        let _SQLdataBase = `var sequelize = new Sequelize ( ${url}, ${dbUsername}, ${password})`;
+        // console.log('data:', dataChunk.schema.data.colORdocs);
 
-        let _instanceData =  {};
+        const _RequireSQL  = `var Sequelize = require('sequelize')`;
+        const _SQLdataBase = `var sequelize = new Sequelize ( ${db.database.url}, ${db.database.username}, ${db.database.password})`;
 
-        db.data.forEach( (value) => {
+        const _instanceData =  {};
+        dbData.forEach( (value) => {
                                       for(var key in db.data)
-                                        _instanceData[key] = key;
                                         _instanceData[key] = db.data.key;
-                                        console.log(key);
+                                        console.log(_instanceData);
+                                      // console.log(value);
                                    });
 
-        let _SQLinstance  = `var ${tableName} = sequelize.define(${tableName}, ${_instanceData})`;
+        let _SQLinstance  = `var ${db.database.table} = sequelize.define(${db.database.table}, ${_instanceData})`;
 
-        console.log('instance: ' ,instance);
+        // console.log('Require IN: ' , _RequireSQL);
+        // console.log('Constructor: ' , _SQLdataBase);
+        // console.log('Model: ' , _SQLinstance);
         console.log('_instanceDATA: ', _instanceData);
-
-        return _SQLinstance;
+        console.log(db);
+        // return _SQLinstance;
 
     }
 
-};
+ // console.log(JSON.stringify(dataChunk, null, '\t'));
+
+ createSQLModel(dataChunk);
+
+
+module.exports = superSQLController;
