@@ -1,24 +1,33 @@
-var express = require ('express');
-var fs = require ('fs');
-var app = express();
-var path = require('path');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-
-var schema = require('./user/postgresSchema')
-var mongoose = require('mongoose');
-
+const express = require ('express');
+const fs = require ('fs');
+const app = express();
+const path = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const userController = require('./user/userController');
+const cookieController = require('./cookie/cookieController');
+const sessionController = require('./session/sessionController');
+const schema = require('./user/postgresSchema');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname);
+  }
+});
 //connect to DB
-// var mongoURI = 'mongodb://localhost/sqlsexy';
-// mongoose.connect(mongoURI);
+const mongoURI = 'mongodb://localhost/databasepower';
+mongoose.connect(mongoURI);
 
-app.use(express.static(path.join(__dirname, './../client')));
+app.use(cookieParser());
 
 // order of process for user
 // userController --> cookieController --> sessionController --> features
-var userController = require('./user/userController');
-var cookieController = require('./cookie/cookieController');
-var sessionController = require('./session/sessionController');
+
 
 // initial web-page
 app.get('/', function(req, res){
@@ -27,42 +36,39 @@ app.get('/', function(req, res){
 
 //adds body to the request which will store username input and password input
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-//Signup Requests
-app.get('/signup', function(req,res){
-  res.sendFile(path.join(__dirname + './../client/signup.html'));
-});
-app.post('/signup', function(req,res){
-  userController.createUser(req,res);
-  res.sendFile(path.join(__dirname + './../client/index.html'));
-});
-
-//Default Login Requests
-app.post('/login', function(req, res){
-  cookieController.setSSIDCookie(req,res);
-  sessionController.isLoggedIn(req,res);
-  userController.verify(req,res);
+app.post('/signup', userController.createUser);
+app.get('/signup', function(req, res) {
+  res.sendFile(path.join(__dirname, './../client/signup.html'));
 });
 
 
-//Authorized user page
-app.get('/permission', function(req, res){
-  //add session and cookie checker before sending to app
-  res.sendFile(path.join(__dirname + './../client/loggedin.html'));
+
+app.post('/login', userController.verifyUser);
+
+app.use('/logout', cookieParser());
+app.get('/logout', function(req, res) {
+  sessionController.logout(req.cookies.ssid);
+  res.redirect('/');
 });
 
-// user logs out and has their session/cookies removed
-app.get('/logout',function(req,res){
-  //add session remover middleware
-  res.sendFile(path.join(__dirname + './../client/index.html'));
+
+app.get('/upload', (req, res) => {
+  res.sendFile(path.join(__dirname, './../client/input.html'));
+});
+app.post('/upload', multer({storage: storage}).single('database'), (req, res) => {
+  res.status(204).end();
 });
 
-app.post('/loggedin',function(req,res){
-  console.log(req.body)
-  schema(req,res)
-  }
-)
+
+app.get('/start', sessionController.isLoggedIn, function(req, res) {
+  res.sendFile(path.join(__dirname, '../client/loggedin.html'));
+});
+
+app.use(express.static(path.join(__dirname, './../client')));
+
+
 app.listen(3000, function(){
   console.log('Listening on port 3000!');
 });

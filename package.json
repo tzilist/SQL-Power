@@ -5,7 +5,7 @@
   "main": "bundle.js",
   "scripts": {
     "prestart": "npm run task",
-    "start": "nodemon server/server.js",
+    "start": "nodemon --ignore uploaded/ server/server.js",
     "start-dev": "npm run task",
     "task": "gulp"
   },
@@ -28,8 +28,8 @@
     "gulp": "^3.9.0",
     "gulp-notify": "^2.2.0",
     "jquery": "^2.2.0",
-    "jsonwebtoken": "^5.7.0",
     "mongoose": "^4.4.4",
+    "multer": "^1.1.0",
     "nodemon": "^1.8.1",
     "path": "^0.12.7",
     "react": "^0.14",
