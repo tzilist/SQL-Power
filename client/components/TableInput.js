@@ -2,16 +2,29 @@ var React = require('react');
 
 
 var TableInput = React.createClass({
+
+
+  // RENDER STRING FOR DOM////////////////////////////////////
+  // NOTE : It looks like this will make the string for the table????
+  // /////////////////////////////////////////////
   render: function () {
-    console.log('where is this?',this.props.state.string);
-    //creating an array of where all the semicolons are
+
+    // GET DOM INPUTS////////////////////////////////////
+    // NOTE : This loop will grab the state and add a ';' after each value;
+    // /////////////////////////////////////////////
+
     var semicolons = [];
     for(var i = 0; i < this.props.state.string.length; i++){
       if (this.props.state.string[i] === ';'){
         semicolons.push(i+1)
+        console.log(this.props.state.string);
       }
     }
 
+    // SEQUIAL TEXT SCHEMA////////////////////////////////////
+    // NOTE : Assigns the state to a variable then adds them to a schema
+    // definition?
+    // /////////////////////////////////////////////
     var requiringSequelize = this.props.state.string.substring(0,semicolons[0])
     var newInstanceOfSequelize = this.props.state.string.substring(semicolons[0], semicolons[1])
     var object = this.props.state.string.substring(semicolons[1], semicolons[2])
@@ -19,6 +32,10 @@ var TableInput = React.createClass({
     var schema = this.props.state.string.substring(semicolons[3], semicolons[4])
     console.log('the semicolons arr', semicolons)
 
+
+    // CONDITIONAL FOR SOMTHING////////////////////////////////////
+    // NOTE : I'm not sure what edge case this is trying to cover.
+    // /////////////////////////////////////////////
     if(this.props.state.string!=='')
       return (
         <div>
@@ -55,6 +72,8 @@ var TableInput = React.createClass({
 
         );
       }
+
+      
       return (
         <form id='createSchema' onSubmit={this.props.create}>
           {newForm}
