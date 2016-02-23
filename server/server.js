@@ -5,7 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
-var schema = require('./user/postgresSchema')
+var schema = require('./user/postgresSchema');
 var mongoose = require('mongoose');
 
 //connect to DB
@@ -27,7 +27,7 @@ app.get('/', function(req, res){
 
 //adds body to the request which will store username input and password input
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 //Signup Requests
 app.get('/signup', function(req,res){
@@ -59,10 +59,10 @@ app.get('/logout',function(req,res){
 });
 
 app.post('/loggedin',function(req,res){
-  console.log(req.body)
-  schema(req,res)
+  console.log(req.body);
+  schema(req,res);
   }
-)
+);
 app.listen(3000, function(){
   console.log('Listening on port 3000!');
 });
