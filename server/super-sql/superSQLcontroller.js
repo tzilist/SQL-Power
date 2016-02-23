@@ -27,32 +27,29 @@ superSQLController.createSQLModel = createSQLModel;
     };
 
     function createSQLModel(dataChunk) {
-        //templating for the top require sequelize and Constructor
         // const db = req.body.schema;  //production variable
         const db    = dataChunk.schema;
         const dbData = dataChunk.schema.data.colORdocs;
 
-        // console.log('data:', dataChunk.schema.data.colORdocs);
-
+        //templating for the top require sequelize and Constructor
         const _RequireSQL  = `var Sequelize = require('sequelize')`;
         const _SQLdataBase = `var sequelize = new Sequelize ( ${db.database.url}, ${db.database.username}, ${db.database.password})`;
 
+        //SQL MODEL
         const _instanceData =  {};
         dbData.forEach( (value) => {
-                                      for(var key in db.data)
-                                        _instanceData[key] = db.data.key;
-                                        console.log(_instanceData);
-                                      // console.log(value);
+                                      for(var key in dbData){
+                                          for (var item in value) {
+                                              console.log('key:', item);
+                                              console.log('value:', value[item]);
+                                              _instanceData[item] = value[item];
+                                            }
+                                          }
                                    });
 
         let _SQLinstance  = `var ${db.database.table} = sequelize.define(${db.database.table}, ${_instanceData})`;
-
-        // console.log('Require IN: ' , _RequireSQL);
-        // console.log('Constructor: ' , _SQLdataBase);
-        // console.log('Model: ' , _SQLinstance);
         console.log('_instanceDATA: ', _instanceData);
         console.log(db);
-        // return _SQLinstance;
 
     }
 
