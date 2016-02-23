@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname);
   }
 });
+
 //connect to DB
 const mongoURI = 'mongodb://localhost/databasepower';
 mongoose.connect(mongoURI);
@@ -68,6 +69,11 @@ app.get('/start', sessionController.isLoggedIn, function(req, res) {
 
 app.use(express.static(path.join(__dirname, './../client')));
 
+app.post('/loggedin',function(req,res){
+  console.log(req.body);
+  schema(req,res);
+  }
+);
 
 app.listen(3000, function(){
   console.log('Listening on port 3000!');
