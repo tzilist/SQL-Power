@@ -26,7 +26,7 @@ userController.createUser = function(req, res) {
       });
     });
 
-  })
+  });
 };
 
 userController.verifyUser = function(req, res) {
