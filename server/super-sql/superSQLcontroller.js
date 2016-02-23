@@ -1,12 +1,15 @@
-var express = require('express');
+"use strict"
+const express = require('express');
 
-var superSQLController = {};
+const superSQLController = {};
 
 //Our json data object
-var dataChunk = { schema:[{
+let dataChunk = { schema:{
                           "database": {
-                                      "username": 'name_value',
-                                      "password": 'db_password'
+                                      "type"     : 'sql',
+                                      "username" : 'name_value',
+                                      "password" : 'db_password',
+                                      "url"      : 'localhost://3000'
                                       },
 
                               "data": [{
@@ -17,7 +20,7 @@ var dataChunk = { schema:[{
                                                       "column Name" : "value"
                                                       }]
                                       }]
-                            }]
+                            }
 
                 };
 
@@ -25,19 +28,32 @@ var dataChunk = { schema:[{
  // console.log(JSON.stringify(dataChunk, null, '\t'));
 
 
-
-
-
 module.exports = {
 
-    parseData: function(req,res,next){
+    createSQLModel: function (req, res, next){
+        //templating for the top require sequelize and Constructor
+        // let db = req.body.schema;  //production variable
+        let db    = dataChunk.schema;
 
+        let _RequireSQL  = `var Sequelize = require('sequelize')`;
+        let _SQLdataBase = `var sequelize = new Sequelize ( ${url}, ${dbUsername}, ${password})`;
 
-    },
+        let _instanceData =  {};
 
-    // createSQLModel: function (req, res, next){
-    //     let instance = `new Sequelize( ${database}, ${dbUsername}, ${password}` );
-    //
-    // }
+        db.data.forEach( (value) => {
+                                      for(var key in db.data)
+                                        _instanceData[key] = key;
+                                        _instanceData[key] = db.data.key;
+                                        console.log(key);
+                                   });
+
+        let _SQLinstance  = `var ${tableName} = sequelize.define(${tableName}, ${_instanceData})`;
+
+        console.log('instance: ' ,instance);
+        console.log('_instanceDATA: ', _instanceData);
+
+        return _SQLinstance;
+
+    }
 
 };
