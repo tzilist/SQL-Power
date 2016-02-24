@@ -8,6 +8,7 @@ const userController = require('./user/userController');
 const cookieController = require('./cookie/cookieController');
 const sessionController = require('./session/sessionController');
 const mongoToSQL = require('./super-sql/mongoToSQLcontroller');
+const SQLtoMongo = require('./super-sql/SQLtoMongoController');
 const schema = require('./user/postgresSchema');
 const mongoose = require('mongoose');
 const multer = require('multer');
