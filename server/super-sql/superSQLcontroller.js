@@ -9,17 +9,17 @@ superSQLController.createSQLModel = createSQLModel;
       "schema":{
       "database": {
         "type"     : 'sql',
-        "username" : 'name_value',
-        "password" : 'db_password',
+        "username" : 'Sequelize.String',
+        "password" : 'Sequelize.String',
         "url"      : 'localhost://3000'
       },
 
       "data": {
         "table": 'table_name',
         "colORdocs" : [{
-          "column Name" : "value",
-          "column Name" : "value",
-          "column Name" : "value"
+          "username" : "johnCrackersmacker",
+          "password" : "yabbadabbado",
+          "url" : "www.super.com"
           }]
         }
       }
@@ -27,37 +27,77 @@ superSQLController.createSQLModel = createSQLModel;
     };
 
     function createSQLModel(dataChunk) {
-        //templating for the top require sequelize and Constructor
+
         // const db = req.body.schema;  //production variable
         const db    = dataChunk.schema;
         const dbData = dataChunk.schema.data.colORdocs;
 
-        // console.log('data:', dataChunk.schema.data.colORdocs);
-
+        //Require SQL
         const _RequireSQL  = `var Sequelize = require('sequelize')`;
+        //Create instance of Sequelize
         const _SQLdataBase = `var sequelize = new Sequelize ( ${db.database.url}, ${db.database.username}, ${db.database.password})`;
 
+        //SQL MODEL Object
         const _instanceData =  {};
+
+        //create Model Obj key: values
         dbData.forEach( (value) => {
-                                      for(var key in db.data)
-                                        _instanceData[key] = db.data.key;
-                                        console.log(_instanceData);
-                                      // console.log(value);
-                                   });
+            for(var key in dbData){
+                for (var item in value) {
+                    _instanceData[item] = value[item];
+                  }
+                }
+         });
 
-        let _SQLinstance  = `var ${db.database.table} = sequelize.define(${db.database.table}, ${_instanceData})`;
+        //Create Model
+        let _SQLinstance  = `var ${dataChunk.schema.data.table} = sequelize.define(${dataChunk.schema.data.table}, ${_instanceData})`;
 
-        // console.log('Require IN: ' , _RequireSQL);
-        // console.log('Constructor: ' , _SQLdataBase);
-        // console.log('Model: ' , _SQLinstance);
-        console.log('_instanceDATA: ', _instanceData);
-        console.log(db);
-        // return _SQLinstance;
+        console.log(_RequireSQL);
+        console.log(_SQLdataBase);
+        console.log(_SQLinstance);
+    }
+
+
+    function createNoSQLModel(dataChunk) {
+
+        // const db = req.body.schema;  //production variable
+        const db    = dataChunk.schema;
+        const dbData = dataChunk.schema.data.colORdocs;
+
+        //Require SQL
+        const _RequireMongoose  = `var mongoose = require('mongoose');`;
+        //Create instance of Sequelize
+        const _Mongooseconnect = `mongoose.connect( mongodb://${db.database.url} );`;
+
+        //Mongoose MODEL Object
+        const _instanceData =  {};
+
+        //create Model Obj key: values
+        dbData.forEach( (value) => {
+              for(var key in dbData){
+                  for (var item in value) {
+                      //  value[item]);
+                      _instanceData[item] = value[item];
+                    }
+                  }
+           });
+
+        //Create Model
+        // CREATE MONGOOSE MODEL////////////////////////////////////
+        // NOTE : This is the mongoose model
+        // Example:  var Cat = mongoose.model('Cat',{name: String};
+        // /////////////////////////////////////////////
+        let _Mongooseinstance  = `var ${dataChunk.schema.data.table} = mongoose.model(${dataChunk.schema.data.table}, ${_instanceData});`;
+
+        console.log(_RequireMongoose);
+        console.log(_Mongooseconnect);
+        console.log(_Mongooseinstance);
 
     }
 
  // console.log(JSON.stringify(dataChunk, null, '\t'));
 
+ // createNoSQLModel(dataChunk);
  createSQLModel(dataChunk);
 
 
