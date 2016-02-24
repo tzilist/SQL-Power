@@ -1,57 +1,55 @@
-var User = require('./userModel');
-var path = require('path');
-// var bcrypt = require('bcrypt');
-var client = path.join(__dirname, '..', '..', 'client');
+const User = require('./userModel');
+const path = require('path');
+const bcrypt = require('bcrypt');
+const cookieController = require('./../cookie/cookieController.js');
+const sessionController = require('./../session/sessionController.js');
+const fs = require('fs');
+const userController = {};
 
-//test user
-var test = {
-  username: 'an',
-  password: 'test'
-};
-
-//store user name and password's input field in object
-var userController = {};
-
-//user will create profile in signup and successfully store to DB if username is not taken
-userController.createUser = function(req, res,next){
-
-  //if user tries to create an account with improper input fields, user will be redirected to signup
-  if(!req.body.username || !req.body.password){
-    res.sendFile(path.join(__dirname + './../../client/index.html'), {error: "Must include username and password"});
+userController.createUser = function(req, res) {
+  if (!req.body.username || !req.body.password) {
+    return res.redirect('/signup');
   }
 
-  //save username and password into database section
-  var newUser = new User({
+  User.findOne({username: req.body.username}, (err, result) => {
+    if(result) return res.redirect('/signup');
+
+    var newUser = new User({
       username: req.body.username,
       password: req.body.password
     });
 
     newUser.save(function(err, result) {
-      if (err) res.sendFile(path.join(__dirname + './../../client/index.html'));
+      User.findOne({username: req.body.username}, (err, result) => {
+        cookieController.setSSIDCookie(res, result._id);
+        res.redirect('/start');
+      });
     });
 
+  });
 };
 
-//user will be verified upon attempted login
-userController.verify = function(req,res,next){
-  // if input fields are undefined, do nothing
-  if(!req.body.username || !req.body.password){
-    return res.sendFile(path.join(__dirname + './../../client/index.html'), {error: "Must include username and password"});
+userController.verifyUser = function(req, res) {
+  // no username or password provided
+  console.log(req.body);
+  if (!req.body.username || !req.body.password) {
+    return res.redirect('/signup');
   }
+  // username/password is incorrect
+  User.findOne({
+    username: req.body.username
+  }, function(err, result) {
+    console.log(result);
+    // username not found
+    if (err || !result) return res.redirect('/signup');
 
-
-  User.findOne({username: req.body.username}, function(err, result){
-    if(err || !result) return res.send('failed');
-
-    result.comparePassword(req.body.password, function(err, check){
-      if(!check) res.send('failed password');
-      res.redirect('/permission');
+    result.comparePassword(req.body.password, function(err, pswdCheck) {
+      if (!pswdCheck) return res.redirect('/signup');
+      cookieController.setSSIDCookie(res, result._id);
+      res.redirect('/start');
     });
   });
-
-
 };
-
 
 
 module.exports = userController;

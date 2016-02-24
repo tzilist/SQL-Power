@@ -1,12 +1,12 @@
+var User = require('./../user/userModel');
+var sessionController = require('./../session/sessionController');
+
 var cookieController = {};
-// var jwt = require('jsonwebtoken');
+cookieController.setSSIDCookie = setSSIDCookie;
 
-var cert = 'key';
-
-cookieController.setSSIDCookie = function(req,res,id){
-  // jwt.sign({ id: id}, cert, {algorithm: 'HS256'}, function(token){
-    res.cookie('ssid', 1, {httpOnly: true});
-  // });
-};
+function setSSIDCookie(res, id) {
+  res.cookie('ssid', id, { httpOnly: true });
+  sessionController.startSession(id);
+}
 
 module.exports = cookieController;
