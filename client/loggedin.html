@@ -7,10 +7,12 @@
    <h1>SQL SXY</h1>
 
    <div id="main-container"></div>
-
-     <form method="GET" action='/logout'>
-       <input type='submit' value="Logout">
-     </form>
+   <h1>Please upload your SQL database or Mongo collection</h1>
+   <form class="upload" action="/upload" method="post" enctype="multipart/form-data">
+     <input type="file" name="database" value="">
+     <input type="text" name="database_name" id="database_name" value="" placeholder="Database Name">
+     <input type="submit" value="Submit">
+     <a href="/logout"><button type="button" name="button">Logout</button></a>
 
  </body>
  <script src="build/bundle.js"></script>

@@ -25,6 +25,7 @@
     "body-parser": "^1.15.0",
     "browserify": "^10.2.4",
     "cookie-parser": "^1.4.1",
+    "easy-zip": "0.0.4",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-notify": "^2.2.0",

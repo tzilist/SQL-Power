@@ -5,8 +5,10 @@
     <title></title>
   </head>
   <body>
+    <h1>Please upload your SQL database or Mongo collection</h1>
     <form class="upload" action="/upload" method="post" enctype="multipart/form-data">
       <input type="file" name="database" value="">
+      <input type="text" name="database_name" id="database_name" value="" placeholder="Database Name">
       <input type="submit" value="Submit">
     </form>
   </body>
